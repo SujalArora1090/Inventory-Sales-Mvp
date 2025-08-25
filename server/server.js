@@ -1,0 +1,21 @@
+import mongoose from "mongoose";
+import express from "express"
+import cors from "cors"
+import { configDotenv } from "dotenv";
+
+let a=await mongoose.connect("mongodb://localhost:27017/")
+
+
+const app = express()
+app.use(express.json());
+app.use(cors());
+const port = 3000
+
+app.get('/', (req, res) => {
+  res.send('Hello World!...')
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+console.log(a)

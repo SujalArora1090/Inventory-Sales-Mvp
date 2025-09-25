@@ -1,21 +1,53 @@
-import mongoose from 'mongoose';
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
-let a = await mongoose.connect('mongodb://localhost:27017/');
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import authRoutes from "./routes/auth.js";
+import protectedRoutes from "./routes/protectedRoutes.js";
+import { isAdmin } from "./Middleware/roleMiddleware.js";
+import { isStaff } from "./Middleware/roleMiddleware.js";
+import productRoutes from "./routes/ProductRoutes.js"
+import logRoutes from "./routes/LogRoutes.js";
+
+
+
+
+
 
 const app = express();
-app.use(express.json());
 app.use(cors());
-const port = 3000;
+app.use(express.json());
+app.use(cors({ origin: "http://localhost:5173" }))
 
-app.get('/', (req, res) => {
-  res.send('Hello World!...');
+
+
+app.use("/api/auth", authRoutes);
+app.use("/api/protected", protectedRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/logs",logRoutes)
+
+
+
+
+
+
+app.get("/", (req, res) => {
+  res.send("Backend running fine with MongoDB connection!");
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
-console.log(a);
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("✅ MongoDB connected");
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch(err => console.log(err));
+
+  
+
+
+
+
+

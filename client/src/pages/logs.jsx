@@ -47,10 +47,55 @@
 //   </div>
 // );
 // }
+
+
 import { useEffect, useState } from "react";
- import LogsAPI from "../utils/logsapi";
-  export default function Logs() { 
-  const [logs, setLogs] = useState([]); 
-    useEffect(() => { LogsAPI.get("/logs").then((res) => setLogs(res.data)); }, []); 
-    return ( <div className="p-4"> <h2 className="text-2xl font-bold mb-4">📜 Activity Logs</h2> {logs.length === 0 ? ( <p>No logs yet.</p> ) : ( logs.map((log) => ( <div key={log._id} className="border p-2 rounded mb-2"> <p> 👤 <b>{log.user?.username || "Unknown User"}</b> ({log.user?.email || "No email"}) <br /> 🛠️ {log.action} → <b>{log.product?.name || "Deleted Product"}</b> <br /> ⏰ {log.createdAt ? new Date(log.createdAt).toLocaleString() : "No Date"} </p> </div> )) )} </div> ); }
+import LogsAPI from "../utils/logsapi";
+
+export default function Logs() {
+  const [logs, setLogs] = useState([]);
+
+  useEffect(() => {
+    LogsAPI.get("/logs").then((res) => setLogs(res.data));
+  }, []);
+
+  return (
+    <div className="p-4 max-w-5xl mx-auto">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">
+        📜 Activity Logs
+      </h2>
+
+      {logs.length === 0 ? (
+        <p className="text-center text-gray-500">No logs yet.</p>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {logs.map((log) => (
+            <div
+              key={log._id}
+              className="border rounded-2xl p-4 bg-white shadow-sm hover:shadow-md transition-all duration-300"
+            >
+              <p className="text-sm sm:text-base break-words">
+                👤 <b>{log.user?.username || "Unknown User"}</b>{" "}
+                <span className="text-gray-500">
+                  ({log.user?.email || "No email"})
+                </span>
+                <br />
+                🛠️ {log.action} →{" "}
+                <b className="text-indigo-600">
+                  {log.product?.name || "Deleted Product"}
+                </b>
+                <br />
+                ⏰{" "}
+                {log.createdAt
+                  ? new Date(log.createdAt).toLocaleString()
+                  : "No Date"}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 

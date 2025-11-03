@@ -12,6 +12,9 @@ import Navbar from "./pages/Navbar.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Logs from "./pages/logs.jsx";
 import Dashboard from "./pages/LowStock.jsx";
+import SalesList from "./pages/saleList.jsx";
+import NewSale from "./components/NewSale.jsx";
+
 
 
 
@@ -59,8 +62,10 @@ function App() {
   }
 />
         <Route path="/front" element={<FrontPage />} />
+        <Route path="/sales" element={<SalesList />} />
         <Route path="/display" element={<DisplayProductsPage />} />
         <Route path="/low-stock" element={<Dashboard />} />
+        <Route path="/new-sale" element={<NewSale />} />
 
       </Routes>
     </BrowserRouter>

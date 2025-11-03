@@ -10,6 +10,7 @@ import { isAdmin } from "./Middleware/roleMiddleware.js";
 import { isStaff } from "./Middleware/roleMiddleware.js";
 import productRoutes from "./routes/ProductRoutes.js"
 import logRoutes from "./routes/LogRoutes.js";
+import salesRouter from "./routes/sales.js";
 
 
 
@@ -27,6 +28,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/protected", protectedRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/logs",logRoutes)
+app.use("/api/sales",salesRouter)
 
 
 

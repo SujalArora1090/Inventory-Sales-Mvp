@@ -177,34 +177,34 @@ export const listSales = async (req, res) => {
 
 export const getRevenueSummary = async (req, res) => {
   try {
-    // ✅ Step 1: Aaj ka date aur time le
+   
     const now = new Date();
 
-    // ✅ Step 2: Different time ranges define kar
+    
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const startOfWeek = new Date(now);
     startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday se start
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    // ✅ Step 3: Daily total
+   
     const dailyTotal = await Sale.aggregate([
       { $match: { createdAt: { $gte: startOfDay } } },
       { $group: { _id: null, total: { $sum: "$total" } } },
     ]);
 
-    // ✅ Step 4: Weekly total
+    
     const weeklyTotal = await Sale.aggregate([
       { $match: { createdAt: { $gte: startOfWeek } } },
       { $group: { _id: null, total: { $sum: "$total" } } },
     ]);
 
-    // ✅ Step 5: Monthly total
+   
     const monthlyTotal = await Sale.aggregate([
       { $match: { createdAt: { $gte: startOfMonth } } },
       { $group: { _id: null, total: { $sum: "$total" } } },
     ]);
 
-    // ✅ Step 6: Response bhej
+    
     res.json({
       dailyRevenue: dailyTotal[0]?.total || 0,
       weeklyRevenue: weeklyTotal[0]?.total || 0,
@@ -249,5 +249,80 @@ export const cancelSale = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+export const getWeeklyTrend = async (req, res) => {
+  try {
+    const now = new Date();
+    const start = new Date(now);
+    start.setDate(now.getDate() - 6);
+    start.setHours(0, 0, 0, 0);
+
+    const rows = await Sale.aggregate([
+      { $match: { createdAt: { $gte: start } } },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+          total: { $sum: "$total" },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    const map = new Map(rows.map((r) => [r._id, r.total]));
+    const result = [];
+
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(now.getDate() - i);
+      const key = d.toISOString().slice(0, 10);
+      const dayLabel = d.toLocaleDateString("en-IN", { weekday: "short" });
+      result.push({ day: dayLabel, date: key, revenue: map.get(key) || 0 });
+    }
+
+    res.json({ data: result });
+  } catch (err) {
+    console.error("❌ Error getting weekly trend:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+export const getTopProducts = async (req, res) => {
+  try {
+    const result = await Sale.aggregate([
+      { $unwind: "$items" },
+      {
+        $group: {
+          _id: "$items.product",
+          totalQty: { $sum: "$items.quantity" },
+        },
+      },
+      { $sort: { totalQty: -1 } }, 
+      { $limit: 5 },
+      {
+        $lookup: {
+          from: "products", 
+          localField: "_id",
+          foreignField: "_id",
+          as: "product",
+        },
+      },
+      { $unwind: "$product" },
+      {
+        $project: {
+          _id: 0,
+          name: "$product.name",
+          sku: "$product.sku",
+          totalQty: 1,
+        },
+      },
+    ]);
+
+    res.json({ data: result });
+  } catch (err) {
+    console.error("❌ Error getting top products:", err.message);
+    res.status(500).json({ error: "Server error" });
   }
 };

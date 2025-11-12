@@ -120,6 +120,7 @@ import { createProduct, updateProduct, deleteProduct } from "../controllers/Prod
 import { logAction } from "../Middleware/authMiddleware.js";
 import { CreateLog } from "../Utils/CreateLog.js";
 import { authorize } from "../Middleware/authMiddleware.js";
+import { adminOnly } from "../Middleware/authMiddleware.js";
 
 
 const router = express.Router();

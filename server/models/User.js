@@ -8,7 +8,9 @@ const userSchema = new mongoose.Schema({
    resetTokenExpiry: Date,
   password: { type: String, sparse: true },
   canManageProducts: { type: Boolean, default: false },
-  role:{type:String,enum:["admin","staff"],
+  role:{
+    type:String,
+    enum:["admin","staff"],
     default:"staff",
     
   }

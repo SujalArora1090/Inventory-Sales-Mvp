@@ -47,7 +47,7 @@ export default function ResetPassword({ token }) {
 
   const submit = async (e) => {
     e.preventDefault();
-    console.log("Sending token:", token); // ✅ debug
+    console.log("Sending token:", token); 
     try {
       const res = await axios.post("http://localhost:5000/api/auth/reset-password", {
         token,         

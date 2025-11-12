@@ -64,7 +64,7 @@ export default function NewSale() {
   const userId = localStorage.getItem("userId") || "68af48d0011e95b3c13135d1"; // replace if you have auth
 
   useEffect(() => {
-    // load products
+    
     const load = async () => {
       try {
         const res = await api.get("/");
@@ -77,22 +77,22 @@ export default function NewSale() {
     load();
   }, []);
 
-  // helper: find product price
+  
   const getPrice = (productId) => {
     const p = products.find((x) => String(x._id) === String(productId));
     return p ? Number(p.price || 0) : 0;
   };
 
-  // update an item row
+  
   const updateItem = (index, changes) => {
     setItems((prev) => {
       const copy = [...prev];
       copy[index] = { ...copy[index], ...changes };
-      // if product changed, update priceAtSale automatically
+      
       if (changes.product !== undefined) {
         copy[index].priceAtSale = getPrice(changes.product);
       }
-      // ensure quantity is a number
+      
       copy[index].quantity = Number(copy[index].quantity) || 0;
       return copy;
     });
@@ -134,10 +134,10 @@ export default function NewSale() {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       alert(res.data?.message || "Sale created");
-      // optional: reset form
+      
       setItems([{ product: "", quantity: 1, priceAtSale: 0 }]);
       setCustomer({ name: "", email: "" });
-      // optional: redirect or re-fetch sales list
+      
     } catch (err) {
       console.error(err);
       alert(err.response?.data?.error || err.message || "Failed to create sale");

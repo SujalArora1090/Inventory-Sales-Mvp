@@ -1,59 +1,3 @@
-// import { Link, useNavigate } from "react-router-dom";
-
-// export default function Navbar() {
-//   const navigate = useNavigate();
-//   const token = localStorage.getItem("token");
-
-//   const handleLogout = () => {
-//     localStorage.removeItem("token");   // remove token
-//     navigate("/login");                 // redirect to login page
-//   };
-
-//   return (
-//     <nav className="bg-blue-600 text-white p-4">
-//       <div className="max-w-6xl mx-auto flex items-center justify-between">
-//       <Link to="/" className="text-xl font-bold">🏠 Home</Link>
-
-//       <div className="hidden md:flex gap-6 items-center">
-//       {!token ? (
-//         <>
-//           <Link to="/register" className="hover:underline">📝 Register</Link>
-//           <Link to="/login" className="hover:underline">🔑 Login</Link>
-//           <Link to="/forgot-password" className="hover:underline">❓ Forgot Password</Link>
-//         </>
-//       ) : (
-//         <>
-//           <Link to="/create-product" className="hover:underline">➕ Create Product</Link>
-//           <Link to="/low-stock" className="hover:underline">Low-stock</Link>
-//           <Link to="/products" className="hover:underline">📦 Product List</Link>
-//           <Link to="/logs" className=" hover:underline">Logs</Link>
-//           <Link to="/front" className="hover:underline">📦 Front Page</Link>
-//           <Link to="/display" className="hover:underline" >📦 Display Product</Link>
-         
-//           <button
-//             onClick={handleLogout}
-//             style={{
-//               background: "red",
-//               color: "white",
-//               border: "none",
-//               padding: "5px 10px",
-//               cursor: "pointer",
-//               borderRadius: "5px",
-//             }}
-//           >
-//             🚪 Logout
-//           </button>
-//         </>
-        
-//       )}
-//       </div>
-      
-//       </div>
-//     </nav>
-//   );
-// }
-
-
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -115,6 +59,9 @@ export default function Navbar() {
               </Link>
               <Link to="/display" className="hover:underline">
                 📦 Display Product
+              </Link>
+              <Link to="/revenue-chart" className="hover:underline">
+                📦 Revenue Chart
               </Link>
              
 

@@ -14,12 +14,16 @@ import Logs from "./pages/logs.jsx";
 import Dashboard from "./pages/LowStock.jsx";
 import SalesList from "./pages/saleList.jsx";
 import NewSale from "./components/NewSale.jsx";
+import RevenueChart from "./components/RevenueChart.jsx";
+import Board from "./pages/Dashboard.jsx";
+
 
 
 
 
 function App() {
   return (
+    
     <BrowserRouter>
       {/* Navigation menu */}
       {/* <nav style={{ display: "flex", gap: "15px", marginBottom: "20px" }}>
@@ -66,6 +70,7 @@ function App() {
         <Route path="/display" element={<DisplayProductsPage />} />
         <Route path="/low-stock" element={<Dashboard />} />
         <Route path="/new-sale" element={<NewSale />} />
+        <Route path="/revenue-chart" element={<Board />} />
 
       </Routes>
     </BrowserRouter>

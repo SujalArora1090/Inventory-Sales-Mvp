@@ -33,7 +33,7 @@ const ProtectedCall = () => {
   const [role, setRole] = useState(null);
   const token = localStorage.getItem("token");
 
-  // Page load pe localStorage se role set karo
+  
   useEffect(() => {
     const savedRole = localStorage.getItem("role");
     if (savedRole) setRole(savedRole);
@@ -42,7 +42,7 @@ const ProtectedCall = () => {
   const callRoute = async (path) => {
     if (!token) return alert("Login first");
 
-    // Frontend role check (optional)
+    
     if (path === "admin" && role !== "admin") return alert("You are not admin");
     if (path === "staff" && role !== "staff") return alert("You are not staff");
 

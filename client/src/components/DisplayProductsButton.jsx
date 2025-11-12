@@ -48,8 +48,8 @@ import React, { useEffect, useState } from "react";
 
 export default function DisplayProductsPage() {
   const [products, setProducts] = useState([]);
-  const [sellProductId, setSellProductId] = useState(null); // 🔸 kis product par sale kar rahe ho
-  const [quantitySold, setQuantitySold] = useState(""); // 🔸 kitna sell karna hai
+  const [sellProductId, setSellProductId] = useState(null); 
+  const [quantitySold, setQuantitySold] = useState(""); 
 
  
   useEffect(() => {
@@ -89,7 +89,7 @@ export default function DisplayProductsPage() {
         alert(data.message);
         if (data.lowStockAlert) alert(data.lowStockAlert);
 
-        // Update UI after sale
+        
         setProducts((prev) =>
           prev.map((p) => (p._id === data.product._id ? data.product : p))
         );

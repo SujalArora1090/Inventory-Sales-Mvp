@@ -1,79 +1,68 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
 import axios from "axios";
 
-// export default function ResetPassword() {
- 
-//   const [password, setPassword] = useState("");
-//   const [msg, setMsg] = useState("");
-//   const [token, setToken] = useState(""); 
-
-
-
-//   const submit = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const res = await axios.post(`http://localhost:5000/api/auth/reset-password`, {
-//         token,
-//         newPassword: password
-//       });
-//       setMsg(res.data.message);
-//     } catch (err) {
-//       setMsg(err?.response?.data?.message || "Error occurred");
-//     }
-//   };
-
-//   return (
-//     <div style={{ padding: 20 }}>
-//       <h2>Reset Password</h2>
-//       <form onSubmit={submit}>
-//         <input
-//           type="password"
-//           placeholder="New password"
-//           value={password}
-//           onChange={(e) => setPassword(e.target.value)}
-//           required
-//         />
-//         <button type="submit">Set Password</button>
-//       </form>
-//       {msg && <p>{msg}</p>}
-//     </div>
-//   );
-// }
-
-export default function ResetPassword({ token }) {
-  const [password, setPassword] = useState("");
+export default function ForgotPasswordSimple() {
+  const [email, setEmail] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [msg, setMsg] = useState("");
 
-  const submit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Sending token:", token); 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/reset-password", {
-        token,         
-        newPassword: password
+      const res = await axios.post("http://localhost:5000/api/auth/forgot-password", {
+        email,
+        answer,
+        newPassword,
       });
       setMsg(res.data.message);
+      setEmail("");
+      setAnswer("");
+      setNewPassword("");
     } catch (err) {
-      setMsg(err?.response?.data?.message || "Error occurred");
+      setMsg(err.response?.data?.message || "Error occurred");
     }
   };
 
   return (
-    <div>
-      <h2>Reset Password</h2>
-      <form onSubmit={submit}>
-        <input
-          type="password"
-          placeholder="New password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Set Password</button>
-      </form>
-      {msg && <p>{msg}</p>}
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+        <h2 className="text-xl font-semibold mb-4 text-center">
+          Forgot Password(Simple)
+        </h2>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <input
+            type="email"
+            placeholder="Email"
+            className="border p-2 rounded"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Security Answer"
+            className="border p-2 rounded"
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="New Password"
+            className="border p-2 rounded"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+          />
+          <button className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+            Reset Password
+          </button>
+        </form>
+        {msg && <p className="mt-3 text-center text-sm text-gray-700">{msg}</p>}
+      </div>
     </div>
   );
 }
+
 

@@ -1,47 +1,4 @@
-// import React, { useEffect, useState } from "react";
 
-// export default function DisplayProductsPage() {
-//   const [products, setProducts] = useState([]);
-
-//   useEffect(() => {
-//     fetch("http://localhost:5000/api/products", {
-//       headers: {
-//         Authorization: `Bearer ${localStorage.getItem("token")}`,
-//       },
-//     })
-//       .then((res) => res.json())
-//       .then((data) => setProducts(data))
-//       .catch((err) => console.error(err));
-//   }, []);
-
-//   return (
-//     <div className="p-6 max-w-6xl mx-auto">
-//       <h1 className="text-xl sm:text-2xl font-bold mb-6 text-center sm:text-left">
-//         Product List
-//       </h1>
-
-//       {products.length === 0 ? (
-//         <p className="text-center text-gray-500">No products available</p>
-//       ) : (
-//         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-//           {products.map((p) => (
-//             <div
-//               key={p._id}
-//               className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 border rounded-2xl bg-white shadow-sm hover:shadow-md transition-all duration-300 break-words"
-//             >
-//               <div className="mb-2 sm:mb-0">
-//                 <p className="font-semibold text-base sm:text-lg">{p.name}</p>
-//                 <p className="text-sm text-gray-600">
-//                   {p.category} — ₹{p.price} — Stock: {p.stock}
-//                 </p>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
 
 
 import React, { useEffect, useState } from "react";

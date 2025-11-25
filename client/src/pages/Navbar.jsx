@@ -7,9 +7,9 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // remove token
+    localStorage.removeItem("token"); 
     alert("Logout Successful ✅");
-    navigate("/login"); // redirect to login page
+    navigate("/login"); 
   };
 
   return (
@@ -84,7 +84,7 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Dropdown */}
+      
       {menuOpen && (
         <div className="md:hidden mt-2 flex flex-col gap-2 bg-blue-700 p-3 rounded">
           {!token ? (

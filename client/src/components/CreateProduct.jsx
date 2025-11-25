@@ -80,7 +80,7 @@ const CreateProduct = ({ onSuccess }) => {
           className="border p-2 rounded w-full"
         />
 
-        {/* Responsive side-by-side fields */}
+     
         <div className="flex flex-col sm:flex-row gap-4">
           <input
             name="price"

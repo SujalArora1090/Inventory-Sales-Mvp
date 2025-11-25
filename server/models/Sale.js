@@ -16,6 +16,8 @@ const saleSchema=new mongoose.Schema({
      createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
      status: { type: String, default: "Completed" },
      createdAt: { type: Date, default: Date.now },
+     gst:Number,
+     discount:Number,
 
 })
 

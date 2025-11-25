@@ -42,22 +42,31 @@ export default function Login() {
    
 
   return (
-    <form onSubmit={handleSubmit}>
+   <div className="flex items-center justify-center min-h-screen bg-gray-200">
+    <form onSubmit={handleSubmit}
+    className="bg-white rounded-2xl p-8 w-full max-w-sm">
+      <h2 className="text-2xl text-center mb-6">User Login</h2>
       <input
         type="text"
         placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
+        required
+        className="w-full mb-4 px-4 py-4 border border-gray-300"
       />
       <input
         type="password"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        required
+         className="w-full mb-4 px-4 py-4 border border-gray-300"
       />
-      <button type="submit">Login</button>
+      <button type="submit"
+      className="w-full bg-blue-600 text-white py-2 rounded-2xl">Login</button>
      
     </form>
+    </div>
   );
 }
 

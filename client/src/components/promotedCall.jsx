@@ -1,31 +1,3 @@
-// import React from "react";
-// import axios from "axios";
-
-// const ProtectedCall = () => {
-//   const token = localStorage.getItem("token");
-
-//   const callRoute = async (path) => {
-//     try {
-//       const res = await axios.get(`http://localhost:5000/api/protected/${path}`, {
-//         headers: { Authorization: `Bearer ${token}` }
-//       });
-//       console.log(`${path} Response:`, res.data);
-//     } catch (err) {
-//       console.log(`${path} Error:`, err.response?.data || err.message);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <button onClick={() => callRoute("admin")}>Call Admin Route</button>
-//       <button onClick={() => callRoute("staff")}>Call Staff Route</button>
-     
-//     </div>
-//   );
-// };
-
-// export default ProtectedCall;
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 

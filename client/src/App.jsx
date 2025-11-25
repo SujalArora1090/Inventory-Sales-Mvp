@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, Link,useNavigate } from "react-router-dom";
 import Home from "./pages/Home.jsx";
-import Register from "./pages/register.jsx";
-import Login from "./pages/login.jsx";
-import ForgotPassword from "./pages/forgotPassword.jsx";
+import Register from "./pages/Register.jsx";
+import Login from "./pages/Login.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
 import CreateProduct from "./components/CreateProduct.jsx";
 import ProductList from "./components/ProductList.jsx";
 import FrontPage from "./pages/FrontPage.jsx";
@@ -25,22 +25,10 @@ function App() {
   return (
     
     <BrowserRouter>
-      {/* Navigation menu */}
-      {/* <nav style={{ display: "flex", gap: "15px", marginBottom: "20px" }}>
-        <Link to="/">🏠 Home</Link>
-        <Link to="/register">📝 Register</Link>
-        <Link to="/login">🔑 Login</Link>
-        <Link to="/forgot-password">❓ Forgot Password</Link>
-        <Link to="/create-product">➕ Create Product</Link>
-        <Link to="/products">📦 Product List</Link>
-        <Link to="/front">📦 Front Page</Link>
-        <Link to="/display">📦 Display Product</Link>
       
-        
-      </nav> */}
       <Navbar/>
 
-      {/* Routes */}
+      
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />

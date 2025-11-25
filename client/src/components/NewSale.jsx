@@ -1,67 +1,18 @@
-// import React, { useState } from "react";
-// import axios from "axios";
 
-// export default function NewSale() {
-//   const [productId, setProductId] = useState("");
-//   const [quantity, setQuantity] = useState("");
-
-//   const handleSale = async (e) => {
-//     e.preventDefault();
-
-//     try {
-//       const res = await axios.post("http://localhost:5000/api/sales", {
-//         productId,
-//         quantity
-//       }, {
-//         headers: {
-//           Authorization: `Bearer ${localStorage.getItem("token")}`
-//         }
-//       });
-
-//       alert(res.data.message); // 
-
-//       if (res.data.lowStockAlert) {
-//         alert(res.data.lowStockAlert);
-//       }
-
-//     } catch (err) {
-//       alert(err.response?.data?.message || "Error creating sale");
-//     }
-//   };
-
-//   return (
-//     <form onSubmit={handleSale} className="p-4">
-//       <input
-//         type="text"
-//         placeholder="Product ID"
-//         value={productId}
-//         onChange={(e) => setProductId(e.target.value)}
-//         className="border p-2 mb-2 block"
-//       />
-//       <input
-//         type="number"
-//         placeholder="Quantity"
-//         value={quantity}
-//         onChange={(e) => setQuantity(e.target.value)}
-//         className="border p-2 mb-2 block"
-//       />
-//       <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-//         Create Sale
-//       </button>
-//     </form>
-//   );
-// }
 
 
 import React, { useEffect, useState } from "react";
-import api from "../utils/api"; // axios instance with baseURL, or import axios directly
+import api from "../utils/api"; 
 
 export default function NewSale() {
   const [products, setProducts] = useState([]);
   const [items, setItems] = useState([{ product: "", quantity: 1, priceAtSale: 0 }]);
   const [customer, setCustomer] = useState({ name: "", email: "" });
   const [submitting, setSubmitting] = useState(false);
-  const userId = localStorage.getItem("userId") || "68af48d0011e95b3c13135d1"; // replace if you have auth
+  const userId = localStorage.getItem("userId") || "68af48d0011e95b3c13135d1"; 
+  const [gst, setGst] = useState(0);
+  const [discount, setDiscount] = useState(0);
+
 
   useEffect(() => {
     
@@ -126,6 +77,8 @@ export default function NewSale() {
       })),
       customer,
       createdBy: userId,
+      gstRate:Number(gst),
+      discount:Number(discount)
     };
 
     try {
@@ -208,6 +161,7 @@ export default function NewSale() {
               </div>
             ))}
           </div>
+          
 
           <div className="mt-2">
             <button type="button" onClick={addRow} className="text-sm bg-gray-100 px-3 py-1 rounded">
@@ -215,12 +169,39 @@ export default function NewSale() {
             </button>
           </div>
         </div>
+        <div className="flex">
+        <div>
+  <label className="text-sm">GST %</label>
+  <input type="number" value={gst} onChange={(e)=>setGst(e.target.value)} className="border p-2 rounded w-24" />
+</div>
+
+<div>
+  <label className="text-sm">Discount ₹</label>
+  <input type="number" value={discount} onChange={(e)=>setDiscount(e.target.value)} className="border p-2 rounded w-24" />
+</div>
+</div>
+        
 
         <div className="flex justify-between items-center pt-2 border-t">
+          
+
           <div>
             <div className="text-sm text-gray-500">Grand total</div>
             <div className="text-2xl font-semibold">₹{grandTotal.toLocaleString()}</div>
           </div>
+          <div className="text-sm text-gray-500">GST Amount</div>
+<div className="font-medium">
+  ₹{((grandTotal * gst) / 100).toFixed(2)}
+</div>
+
+<div className="text-sm text-gray-500">Discount</div>
+<div className="font-medium">₹{discount}</div>
+
+<div className="text-lg font-bold mt-2 text-green-600">
+  Final: ₹{(grandTotal + (grandTotal * gst)/100 - discount).toFixed(2)}
+</div>
+
+          
 
           <div>
             <button
@@ -237,111 +218,6 @@ export default function NewSale() {
   );
 }
 
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-
-// export default function NewSale() {
-//   const [products, setProducts] = useState([]);
-//   const [productId, setProductId] = useState("");
-//   const [quantity, setQuantity] = useState(1);
-//   const [total, setTotal] = useState(0);
-//   const [selectedProduct, setSelectedProduct] = useState(null);
-
-  
-//   useEffect(() => {
-//     const load = async () => {
-//       try {
-//         const res = await axios.get("http://localhost:5000/api/products");
-//         setProducts(res.data);
-//       } catch (err) {
-//         console.error("Could not load products", err);
-//       }
-//     };
-//     load();
-//   }, []);
-
- 
-//   useEffect(() => {
-//     const prod = products.find((p) => p._id === productId);
-//     setSelectedProduct(prod || null);
-//     if (prod) setTotal(prod.price * quantity);
-//   }, [productId, quantity, products]);
-
- 
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const res = await axios.post(
-//         "http://localhost:5000/api/sales",
-//         { productId, quantity },
-//         {
-//           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-//         }
-//       );
-//       alert(res.data.message);
-//     } catch (err) {
-//       alert(err.response?.data?.message || "Error creating sale");
-//     }
-//   };
-
-//   return (
-//     <div className="flex justify-center items-center min-h-screen bg-gray-50">
-//       <form
-//         onSubmit={handleSubmit}
-//         className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-md"
-//       >
-//         <h2 className="text-2xl font-semibold mb-6 text-center">
-//           🧾 Create New Sale
-//         </h2>
-
-       
-//         <label className="block mb-2 font-medium text-gray-700">
-//           Select Product
-//         </label>
-//         <select
-//           value={productId}
-//           onChange={(e) => setProductId(e.target.value)}
-//           className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 mb-4"
-//           required
-//         >
-//           <option value="">-- Choose Product --</option>
-//           {products.map((p) => (
-//             <option key={p._id} value={p._id}>
-//               {p.name} — ₹{p.price}
-//             </option>
-//           ))}
-//         </select>
-
-       
-//         <label className="block mb-2 font-medium text-gray-700">
-//           Quantity
-//         </label>
-//         <input
-//           type="number"
-//           min="1"
-//           value={quantity}
-//           onChange={(e) => setQuantity(Number(e.target.value))}
-//           className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 mb-4"
-//         />
-
-       
-//         {selectedProduct && (
-//           <div className="text-center mb-4 text-lg font-medium">
-//             Total: <span className="text-blue-600">₹{total}</span>
-//           </div>
-//         )}
-
-        
-//         <button
-//           type="submit"
-//           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-all duration-200"
-//         >
-//           Create Sale
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
 
 
 

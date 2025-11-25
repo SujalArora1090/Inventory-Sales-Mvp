@@ -20,7 +20,7 @@ const seedSales = async () => {
   try {
     await connectDB();
 
-    // Fetch some existing products and a user
+
     const products = await Product.find().limit(2);
     const user = await User.findOne();
 
@@ -29,7 +29,7 @@ const seedSales = async () => {
       process.exit(1);
     }
 
-    // Dummy sale data (manually include total)
+  
     const saleData = [
       {
         items: [
@@ -39,7 +39,7 @@ const seedSales = async () => {
             priceAtSale: products[0].price,
           },
         ],
-        total: products[0].price * 3, // manually calculated total
+        total: products[0].price * 3,
         customer: { name: "Aman Kumar", email: "aman@example.com" },
         createdBy: user ? user._id : null,
       },
@@ -51,17 +51,17 @@ const seedSales = async () => {
             priceAtSale: products[1].price,
           },
         ],
-        total: products[1].price * 2, // manually calculated total
+        total: products[1].price * 2, 
         customer: { name: "Sujal Arora", email: "sujal@example.com" },
         createdBy: user ? user._id : null,
       },
     ];
 
-    // Clear old sales
+    
     await Sale.deleteMany();
     console.log("🧹 Old sales cleared.");
 
-    // Insert new sales
+  
     const inserted = await Sale.insertMany(saleData);
     console.log(`✅ ${inserted.length} sales added successfully.`);
 

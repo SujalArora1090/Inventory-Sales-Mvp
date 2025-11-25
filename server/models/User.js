@@ -13,7 +13,9 @@ const userSchema = new mongoose.Schema({
     enum:["admin","staff"],
     default:"staff",
     
-  }
+  },
+   securityQuestion: { type: String },
+     securityAnswer: { type: String },
   
 });
 

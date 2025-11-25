@@ -20,8 +20,8 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
-  // optionally refresh user on mount by calling /me
-  useEffect(() => { /* optional: verify token */ }, []);
+ 
+  useEffect(() => { }, []);
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

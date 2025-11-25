@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App.jsx';
-import Login from './pages/login.jsx';
-import Register from './pages/register.jsx';
-import ForgotPassword from './pages/forgotPassword.jsx';
+import Login from './pages/Login.jsx';
+import Register from './pages/Register.jsx';
+import ForgotPassword from './pages/ForgotPassword.jsx';
 import ResetPassword from './pages/ResetPassword.jsx';
 import ProductList from './components/ProductList.jsx'
 import  ProductForm from './components/CreateProduct.jsx'

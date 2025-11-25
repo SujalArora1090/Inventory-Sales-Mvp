@@ -27,7 +27,7 @@ export const CreateLog = async ({ userId, action, productId }) => {
     return log;
   } catch (error) {
     console.error("Error creating log:", error.message);
-    throw error;  // ← throw karke failure ko pakdo
+    throw error; 
   }
 };
 

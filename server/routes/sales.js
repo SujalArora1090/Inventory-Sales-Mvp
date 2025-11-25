@@ -10,7 +10,7 @@ import { getTopProducts } from "../controllers/saleControllers.js";
 
 const router = express.Router();
 
-// POST /api/sales → new sale create karega
+
 router.post("/",protect, createSale);
 router.get("/",protect,listSales)
 router.get("/",protect, listProducts);

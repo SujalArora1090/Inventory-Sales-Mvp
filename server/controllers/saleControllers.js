@@ -8,7 +8,7 @@ export const createSale = async (req, res) => {
     const session=await mongoose.startSession();
     session.startTransaction();
   try {
-    const { items, customer, createdBy } = req.body;
+    const { items, customer, createdBy,discount=0,gstRate=5 } = req.body;
 
 
     if (!items || !Array.isArray(items) || items.length === 0) {
@@ -16,6 +16,7 @@ export const createSale = async (req, res) => {
     }
 
     let total = 0;
+    
 
   
     for (const item of items) {
@@ -44,29 +45,32 @@ export const createSale = async (req, res) => {
     await ActivityLog.create({
         action:"SALE_CREATED",
         details:`${items.length} item(s) sold to ${customer.name} | total:INR${total}`,
-        user:createdBy || null,
+        
+        user: req.user._id,
         product:items[0].product,
     })
-
+    
+    const gstAmount=(total*gstRate)/100;
+    const discountAmount=Number(discount)||0;
+    const finalTotal=total+gstAmount-discountAmount;
 
     
     const sale = new Sale({
       items,
       total,
+      gst:gstAmount,
+      discount:discountAmount,
+      finalTotal,
       customer,
       createdBy,
+
     });
 
     const savedSale = await sale.save({session});
     await session.commitTransaction();
     session.endSession();
 
-    await ActivityLog.create({
-        action:"SALE_CREATED",
-        details:`${items.length} item(s) sold to ${customer.name} | total:INR${total}`,
-        user:createdBy || null,
-        product:items[0].product,
-    })
+
 
 
     
@@ -86,82 +90,14 @@ export const createSale = async (req, res) => {
   }
 };
 
-// export const listSales = async (req, res) => {
-//   try {
-//     const {
-//       page = 1,
-//       limit = 20,
-//       product: productId,
-//       user: userId,
-//       from,
-//       to,
-//       sortBy = "createdAt",
-//       order = "desc"
-//     } = req.query;
 
-//     const pageNum = Math.max(1, parseInt(page, 10) || 1);
-//     const lim = Math.max(1, Math.min(100, parseInt(limit, 10) || 20));
-
-//     // Build filter
-//     const filter = {};
-
-//     // filter by createdBy / user
-//     if (userId) filter.createdBy = userId;
-
-//     // date range filter using createdAt
-//     if (from || to) {
-//       filter.createdAt = {};
-//       if (from) filter.createdAt.$gte = new Date(from);
-//       if (to) {
-//         // set time to end of day for inclusive behaviour if only date provided
-//         const toDate = new Date(to);
-//         toDate.setHours(23, 59, 59, 999);
-//         filter.createdAt.$lte = toDate;
-//       }
-//     }
-
-//     // filter by product inside items array
-//     if (productId) {
-//       // sales that have at least one item.product == productId
-//       filter["items.product"] = productId;
-//     }
-
-//     // Count total
-//     const totalCount = await Sale.countDocuments(filter);
-
-//     // Sorting
-//     const sortOrder = order === "asc" ? 1 : -1;
-//     const sortObj = { [sortBy]: sortOrder };
-
-//     // Query with pagination + populate
-//     const sales = await Sale.find(filter)
-//       .sort(sortObj)
-//       .skip((pageNum - 1) * lim)
-//       .limit(lim)
-//       .populate("items.product", "name sku price")
-//       .populate("createdBy", "name email");
-
-//     return res.json({
-//       meta: {
-//         total: totalCount,
-//         page: pageNum,
-//         limit: lim,
-//         pages: Math.ceil(totalCount / lim),
-//       },
-//       data: sales,
-//     });
-//   } catch (err) {
-//     console.error("❌ Error listing sales:", err);
-//     return res.status(500).json({ error: "Server error" });
-//   }
-// };
 
 export const listSales = async (req, res) => {
   try {
    
     const sales = await Sale.find()
       .sort({ createdAt: -1 }) 
-      .populate("items.product", "name sku price")
+      .populate("items.product", "name sku price quantity recorderLevel")
       .populate("createdBy", "name email");
 
     res.json({
@@ -170,7 +106,7 @@ export const listSales = async (req, res) => {
       data: sales,
     });
   } catch (err) {
-    console.error("❌ Error fetching sales:", err.message);
+    console.error(" Error fetching sales:", err.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -221,7 +157,7 @@ export const listProducts = async (req, res) => {
     const products = await Product.find({}, "name price sku");
     res.json(products);
   } catch (err) {
-    console.error("❌ Error fetching products:", err.message);
+    console.error(" Error fetching products:", err.message);
     res.status(500).json({ error: "Server error" });
   }
 };
@@ -235,7 +171,7 @@ export const cancelSale = async (req, res) => {
       return res.status(400).json({ message: "Sale already cancelled" });
     }
 
-    // 🧾 Update each product stock
+   
     for (const item of sale.items) {
       await Product.findByIdAndUpdate(item.product._id, {
         $inc: { stock: item.quantity },
